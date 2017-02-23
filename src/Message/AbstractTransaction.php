@@ -15,6 +15,7 @@ abstract class AbstractTransaction extends AbstractRequest
         'finansbank' => 'https://www.fbwebpos.com/servlet/cc5ApiServer',
         'halkbank' => 'https://sanalpos.halkbank.com.tr/servlet/cc5ApiServer',
         'anadolubank' => 'https://anadolusanalpos.est.com.tr/servlet/cc5ApiServer',
+        'activa' => 'https://activa.eway2pay.com/fim/cc5ApiServer',
         'test' => 'https://entegrasyon.asseco-see.com.tr/servlet/cc5ApiServer',
     ];
 
