@@ -12,6 +12,7 @@ abstract class AbstractPayment extends AbstractRequest
         'finansbank' => 'https://www.fbwebpos.com/servlet/est3Dgate',
         'halkbank' => 'https://sanalpos.halkbank.com.tr/servlet/est3Dgate',
         'anadolubank' => 'https://anadolusanalpos.est.com.tr/servlet/est3Dgate',
+        'activa' => 'https://activa.eway2pay.com/fim/est3dgate',
         'test' => 'https://entegrasyon.asseco-see.com.tr/fim/est3Dgate',
     ];
 
