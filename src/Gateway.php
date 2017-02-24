@@ -20,9 +20,11 @@ class Gateway extends AbstractGateway
             'clientId' => '',
             'orderid' => '',
             'storeKey' => '',
-            'firmName' => '',
+            'BillToName' => 'billToName',
+            'BillToCompany' => 'billToCompany',
             'transactionType' => 'Auth',
             'installment' => 1,
+            'lang' => 'sl',
             'testMode' => false,
         );
     }
@@ -68,12 +70,36 @@ class Gateway extends AbstractGateway
     }
 
     public function getFirmName() {
-        return $this->getParameter('firmName');
+       return $this->getParameter('firmName');
     }
 
-    public function setFirmName ($value) {
-        return $this->setParameter('firmName', $value);
+    public function setFirmName($value) {
+       return $this->setParameter('firmName', $value);
     }
+
+    public function getBillToName() {
+        return $this->getParameter('billToName');
+    }
+
+    public function setBillToName($value) {
+        return $this->setParameter('billToName', $value);
+    }
+
+    public function getBillToCompany() {
+        return $this->getParameter('billToCompany');
+    }
+
+    public function setBillToCompany($value) {
+        return $this->setParameter('billToCompany', $value);
+    }
+
+   public function getLang() {
+      return $this->getParameter('lang');
+   }
+
+   public function setLang($value) {
+      return $this->setParameter('lang', $value);
+   }
 
     public function authorize(array $parameters = array())
     {

@@ -14,7 +14,7 @@ class CompletePaymentResponse extends AbstractResponse
         $this->request = $request;
         $this->data = $data;
         if (!$this->signHash()) {
-            throw new InvalidResponseException('Sayısal İmza Doğrulanmadı');
+            throw new InvalidResponseException('Invalid sign hash');
         }
     }
 
@@ -55,15 +55,15 @@ class CompletePaymentResponse extends AbstractResponse
 
     private function signHash()
     {
-        $hashParams = explode(':', $this->data['HASHPARAMS']);
+        $hashParams = explode('|', trim($this->data['HASHPARAMS']));
         $signature = "";
         foreach ($hashParams as $parameter) {
             if (isset($this->data[$parameter])) {
-                $signature .= $this->data[$parameter];
+                $signature .= $this->data[$parameter] . '|';
             }
         }
-        $generateHash = base64_encode(pack('H*', sha1($signature . $this->request->getStoreKey())));
-        if ($signature != $this->data["HASHPARAMSVAL"] || $generateHash != $this->data["HASH"]) {
+        $generateHash = base64_encode(pack('H*', hash('sha512', $signature . $this->request->getStoreKey())));
+        if ($generateHash != $this->data["HASH"]) {
             return false;
         }
         return true;

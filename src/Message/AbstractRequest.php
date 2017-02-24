@@ -80,4 +80,31 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
         return $this->endpoints[$gateway];
     }
 
+
+
+
+   public function getBillToName() {
+      return $this->getParameter('billToName');
+   }
+
+   public function setBillToName($value) {
+      return $this->setParameter('billToName', $value);
+   }
+
+   public function getBillToCompany() {
+      return $this->getParameter('billToCompany');
+   }
+
+   public function setBillToCompany($value) {
+      return $this->setParameter('billToCompany', $value);
+   }
+
+   public function getLang() {
+      return $this->getParameter('lang');
+   }
+
+   public function setLang($value) {
+      return $this->setParameter('lang', $value);
+   }
+
 }

@@ -23,48 +23,51 @@ abstract class AbstractPayment extends AbstractRequest
 
     public function getData()
     {
-        $this->validate('amount', 'card');
+         $data = array();
 
-        $cardBrand = $this->getCard()->getBrand();
-        if (!array_key_exists($cardBrand, $this->allowedCardBrands)) {
-            throw new InvalidCreditCardException('Kart geçerli değil, sadece Visa ya da MasterCard kullanılabilir');
-        } 
+         $data['clientid'] = $this->getClientId();
+         $data['amount'] = $this->getAmount();
+         $data['oid'] = $this->getOrderId();
+         $data['okurl'] = $this->getReturnUrl();
+         $data['failUrl'] = $this->getCancelUrl();
+         $data['TranType'] = $this->transactionType;
+         $data['currency'] = $this->getCurrency();
+         $data['rnd'] = microtime();
+         $data['storetype'] = '3d_pay_hosting';
+         $data['hashAlgorithm'] = 'ver2';
+         $data['lang'] = $this->getLang();
+         $data['BillToName'] = $this->getBillToName();
+         $data['BillToCompany'] = $this->getBillToCompany();
+         $data['refreshtime'] = '5';
 
-        $data = array();
-        $data['pan'] = $this->getCard()->getNumber();
-        $data['cv2'] = $this->getCard()->getCvv();
-        $data['Ecom_Payment_Card_ExpDate_Year'] = $this->getCard()->getExpiryDate('y');
-        $data['Ecom_Payment_Card_ExpDate_Month'] = $this->getCard()->getExpiryDate('m');
-        $data['cardType'] = $this->allowedCardBrands[$cardBrand];
+         $signatureArr = [
+            $data['clientid'],
+            $data['oid'],
+            $data['amount'],
+            $data['okurl'],
+            $data['failUrl'],
+            $data['TranType'],
+            '',
+            $data['rnd'],
+            '',
+            '',
+            '',
+            $data['currency'],
+            $this->getStoreKey()
+         ];
 
-        $data['clientid'] = $this->getClientId();
-        $data['oid'] = $this->getOrderId();
-        $data['amount'] = $this->getAmount();
-        $data['currency'] = $this->getCurrency();
-        $data['okUrl'] = $this->getReturnUrl();
-        $data['failUrl'] = $this->getCancelUrl();
-        $data['storetype'] = '3d_pay';
-        $data['rnd'] = time();
-        $data['firmaadi'] = $this->getFirmName();
-        $data['islemtipi'] = $this->transactionType;
-        
-        $data['taksit'] = null;
-        if ($installment = $this->getInstallment()) {
-            $data['taksit'] = $installment;
-        }
+         foreach ($signatureArr as $key => $value) {
+            $signatureArr[$key] = str_replace("|", "\\|", str_replace("\\", "\\\\", $value));
+         }
 
-        $signature =    $data['clientid'].
-                        $data['oid'].
-                        $data['amount'].
-                        $data['okUrl'].
-                        $data['failUrl'].
-                        $data['islemtipi'].
-                        $data['taksit'].
-                        $data['rnd'].
-                        $this->getStoreKey();
+         $stringToHash = join('|', $signatureArr);
+         $calculatedHashValue = hash('sha512', $stringToHash);
+         $data['hash'] = base64_encode (pack('H*',$calculatedHashValue));
 
-        $data['hash'] = base64_encode(pack('H*', sha1($signature)));
-        return $data;
+         $data['encoding'] = 'utf-8';
+         $data['module_name'] = 'Degriz_NestPay';
+
+         return $data;
     }
 
     public function sendData($data)
