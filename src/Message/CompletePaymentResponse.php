@@ -20,7 +20,9 @@ class CompletePaymentResponse extends AbstractResponse
 
     public function isSuccessful()
     {   
-        return in_array($this->data['mdStatus'], [1, 2, 3, 4]) && $this->data["Response"] === 'Approved';
+        if (isset($this->data['mdStatus']) && !in_array($this->data['mdStatus'], [1, 2, 3, 4]))
+            return false;
+        return $this->data["Response"] === 'Approved';
     }
 
     public function getMessage()
