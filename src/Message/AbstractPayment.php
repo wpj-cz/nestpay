@@ -14,7 +14,7 @@ abstract class AbstractPayment extends AbstractRequest
         'anadolubank' => 'https://anadolusanalpos.est.com.tr/servlet/est3Dgate',
         'activa' => 'https://activa.eway2pay.com/fim/est3dgate',
         'testAsseco' => 'https://entegrasyon.asseco-see.com.tr/fim/est3Dgate',
-        'test' => 'https://testsecurepay.intesasanpaolocard.com/fim/est3dgate',
+        'test' => 'https://testsecurepay.eway2pay.com/fim/est3dgate',
     ];
 
     protected $allowedCardBrands = [
